@@ -184,7 +184,7 @@ public class DBManager {
 
         String selection = KEY_ID_PATIENT + " = ? ";
         String[] selectionArgs = new String[]{String.valueOf(idPatient)};
-        Cursor c = db.query(TABLE_USERS, null, selection, selectionArgs, null, null, null);
+        Cursor c = db.query(TABLE_USERS_DATA, null, selection, selectionArgs, null, null, null);
         if (c.moveToFirst()) {
             int idColumn = c.getColumnIndex(KEY_ID);
             int idPatientColumn = c.getColumnIndex(KEY_ID_PATIENT);

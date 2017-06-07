@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import com.example.bpdiagnostics.fragments.AboutFragment;
 import com.example.bpdiagnostics.fragments.MeasureFragment;
 import com.example.bpdiagnostics.fragments.UserSearchFragment;
+import com.example.bpdiagnostics.fragments.UserStatisticsFragment;
 import com.example.bpdiagnostics.helpers.DBManager;
 import com.example.bpdiagnostics.helpers.PreferencesManager;
 import com.example.bpdiagnostics.utils.Constants;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
 
                 }
                 if (tab.getTag().equals(INFO)) {
-
+                    addFragment(UserStatisticsFragment.newInstance(id));
                 }
                 if (tab.getTag().equals(ABOUT)) {
                     addFragment(AboutFragment.newInstance());

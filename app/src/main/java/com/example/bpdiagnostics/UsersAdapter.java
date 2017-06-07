@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.bpdiagnostics.fragments.UserSearchFragment;
 import com.example.bpdiagnostics.models.User;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
@@ -45,10 +43,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final User user = users.get(position);
-
+/*
         holder.textFirstName.setText(user.getFirstName());
         holder.textLastName.setText(user.getLastName());
-        holder.textParentName.setText(user.getParent());
+        holder.textParentName.setText(user.getParent());*/
+        holder.textName.setText(user.getLastName() + " " + user.getFirstName() + " " + user.getParent());
         holder.textEmail.setText(user.getEmail());
         holder.textBirthday.setText(user.getBirhday());
         holder.textSex.setText(user.getSex());
@@ -72,12 +71,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        @BindView(R.id.text_first_name)
-        TextView textFirstName;
-        @BindView(R.id.text_last_name)
-        TextView textLastName;
-        @BindView(R.id.text_parent_name)
-        TextView textParentName;
+        /*    @BindView(R.id.text_first_name)
+            TextView textFirstName;
+            @BindView(R.id.text_last_name)
+            TextView textLastName;
+            @BindView(R.id.text_parent_name)
+            TextView textParentName;*/
+        @BindView(R.id.text_name)
+        TextView textName;
         @BindView(R.id.text_birthday)
         TextView textBirthday;
         @BindView(R.id.text_sex)

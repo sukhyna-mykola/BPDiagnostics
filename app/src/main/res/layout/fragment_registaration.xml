@@ -5,170 +5,165 @@
     tools:context="com.example.bpdiagnostics.fragments.RegistarationFragment">
 
     <ScrollView
+        android:padding="@dimen/m_dimen"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Реєстрація" />
+                android:orientation="vertical"
+                android:padding="@dimen/m_dimen">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Прізвище" />
+
+                <EditText
+                    android:id="@+id/editText_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ім’я" />
+
+                <EditText
+                    android:id="@+id/editText_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="По-батькові" />
+
+                <EditText
+                    android:id="@+id/editText_parent_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Дата народження" />
+
+                <EditText
+                    android:id="@+id/editText_birthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Вкажіть стать" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <CheckBox
+                        android:id="@+id/checkBox_men"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Прізвище" />
+                        android:layout_weight="1"
+                        android:text="Чоловік" />
 
-                    <EditText
-                        android:id="@+id/editText_last_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-
-                        android:layout_width="match_parent"
+                    <CheckBox
+                        android:id="@+id/checkBox_women"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ім’я" />
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Жінка" />
 
-                    <EditText
-                        android:id="@+id/editText_first_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="По-батькові" />
-
-                    <EditText
-                        android:id="@+id/editText_parent_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Дата народження" />
-
-                    <EditText
-                        android:id="@+id/editText_birthday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Вкажіть стать" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/checkBox_men"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Чоловік" />
-
-                        <CheckBox
-                            android:id="@+id/checkBox_women"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:checked="true"
-                            android:text="Жінка" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Електронна пошта" />
-
-                    <EditText
-
-                        android:id="@+id/editText_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textEmailAddress" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Пароль" />
-
-                    <EditText
-                        android:id="@+id/editText_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPassword" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ви лікар?" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/checkBox_doctor_no"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="ні" />
-
-                        <CheckBox
-                            android:id="@+id/checkBox_doctor_yes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="так" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/button_registration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Реєстрація" />
-
-                        <Button
-                            android:id="@+id/button_cencel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Відмінити" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Електронна пошта" />
+
+                <EditText
+
+                    android:id="@+id/editText_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Пароль" />
+
+                <EditText
+                    android:id="@+id/editText_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ви лікар?" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkBox_doctor_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ні" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox_doctor_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="так" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_registration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Реєстрація" />
+
+                    <Button
+                        android:id="@+id/button_cencel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Відмінити" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
     </ScrollView>
 
 

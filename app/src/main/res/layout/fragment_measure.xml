@@ -4,97 +4,98 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="@dimen/m_dimen"
     tools:context="com.example.bpdiagnostics.fragments.SignInFragment">
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Останнє вимірювання АТ" />
+        android:text="Останнє вимірювання АТ"
+        android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/s_dimen">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/s_dimen"
                 android:text="Дата (ДД-ММ-РРР) і час (ЧЧ:ХХ)" />
 
             <EditText
-
                 android:id="@+id/editText_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="date" />
+                android:inputType="date"
+                android:padding="@dimen/s_dimen" />
 
-            <LinearLayout
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="@dimen/s_dimen"
+                android:text="Оцініть своє самопочуття" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinner_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/s_dimen" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Оцініть своє самопочуття" />
 
-                    <Spinner
-                        android:id="@+id/spinner_state"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/s_dimen"
+                android:text="Вкажіть значення АТ(мм.р.с)" />
 
-                </LinearLayout>
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:padding="@dimen/s_dimen"
+                android:rowCount="2">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <TextView
+                    android:padding="@dimen/s_dimen"
+                    android:text="Систолічний" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Вкажіть значення АТ(мм.р.с)" />
 
-                    <GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:rowCount="2">
+                <EditText
+                    android:id="@+id/editText_sistolic"
+                    android:layout_gravity="fill_horizontal"
+                    android:ems="10"
+                    android:inputType="phone"
+                    android:padding="@dimen/s_dimen" />
 
-                        <TextView android:text="Систолічний" />
 
-                        <EditText
-                            android:id="@+id/editText_sistolic"
-                            android:layout_gravity="fill_horizontal" />
+                <TextView
+                    android:padding="@dimen/s_dimen"
+                    android:text="Діастолічний" />
 
-                        <TextView android:text="Діастолічний" />
-
-                        <EditText
-                            android:id="@+id/editText_diastolic"
-                            android:layout_gravity="fill_horizontal" />
-                    </GridLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
+                <EditText
+                    android:id="@+id/editText_diastolic"
+                    android:layout_gravity="fill_horizontal"
+                    android:ems="10"
+                    android:inputType="phone"
+                    android:padding="@dimen/s_dimen" />
+            </GridLayout>
 
 
             <Button
                 android:id="@+id/button_save_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Занести дані до бази" />
 
         </LinearLayout>

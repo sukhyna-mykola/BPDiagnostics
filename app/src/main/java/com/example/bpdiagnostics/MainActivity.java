@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
     private static final String SEARCH = "SEARCH";
     private static final String MEASURE = "MESURE";
     private TabLayout tabLayout;
-    private FrameLayout fragmentContainer;
     private FragmentManager fragmentManager;
 
     private DBManager manager;
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -102,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
             }
         });
 
+        addFragment(UserSearchFragment.newInstance());
+
     }
 
     @Override
@@ -120,6 +120,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
         }
 
     }
+
+    private void addStatisticsFragment(long id) {
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment newFragment = UserStatisticsFragment.newInstance(id);
+        if (fragment == null) {
+            fragment = newFragment;
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack("").commitAllowingStateLoss();
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, newFragment).addToBackStack("").commitAllowingStateLoss();
+        }
+
+    }
+
 
     private void configureUserTabs() {
         tabLayout.removeAllTabs();
@@ -158,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
 
             }
         });
+        addFragment(MeasureFragment.newInstance(id));
 
     }
 
@@ -195,6 +209,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
 
     @Override
     public void showUserFragment(long id) {
-
+        addStatisticsFragment(id);
     }
 }

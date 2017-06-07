@@ -44,11 +44,9 @@ public class StatisticsHelper {
 
     private float minS = Float.MAX_VALUE, minD = Float.MAX_VALUE, maxS = Float.MIN_VALUE, maxD = Float.MIN_VALUE;
 
-    private String state;
+    private int state;
 
-    public String getState() {
-        return state;
-    }
+
 
     public StatisticsHelper(Context context, long userID) {
         dbManager = DBManager.getInstance(context);
@@ -179,6 +177,10 @@ public class StatisticsHelper {
 
     }
 
+    public int getState() {
+        return state;
+    }
+
     private void calcState() {
 
         float inNorm = 0, outNorm = 0;
@@ -217,16 +219,16 @@ public class StatisticsHelper {
                 && (av.getX() > normaSmin && av.getX() < normaSmax && av.getY() > normaDmin && av.getY() < normaDmax)
                 && (Math.abs(l.getX() - av.getX()) < e && Math.abs(l.getY() - av.getY()) < e)
                 && (inGiper == 0)) {
-            state = "Гарне";
+            state = 1;
         } else if ((inNormPercent > 0.4) &&
                 ((av.getX() > normaSmin && av.getX() < normaSmax &&
                         av.getY() > normaDmin && av.getY() < normaDmax) || checInsideOrNiarNorm(av)) &&
                 (Math.abs(l.getX() - av.getX()) < 2 * e && Math.abs(l.getY() - av.getY()) < 2 * e) &&
                 (inGiper < 5) &&
                 (maxS - minS < 50)) {
-            state = "Хороше";
+            state = 2;
 
-        } else state = "Поганий";
+        } else state = 3;
 
     }
 

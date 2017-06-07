@@ -4,38 +4,52 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:padding="@dimen/m_dimen"
     tools:context="com.example.bpdiagnostics.fragments.SignInFragment">
 
+    <TextView
+        android:id="@+id/state_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Загальний стан пацієнта"
+        android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_marginBottom="@dimen/m_dimen"
+        android:layout_weight="5">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
 
-            <TextView
-                android:id="@+id/state_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Загальний стан пацієнта" />
-
-
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart_line"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/text_state"
-                android:layout_below="@+id/state_label" />
+                android:layout_above="@+id/state_layout" />
 
-            <TextView
-                android:id="@+id/text_state"
+            <LinearLayout
+                android:id="@+id/state_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Стан здоровя: " />
+
+                <TextView
+                    android:id="@+id/text_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
 
         </RelativeLayout>
 
@@ -44,7 +58,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="3">
 
 
         <LinearLayout
@@ -56,7 +70,8 @@
                 android:id="@+id/chart_column"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:padding="@dimen/s_dimen" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -67,7 +82,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Статистичні показаники" />
+                    android:paddingBottom="@dimen/s_dimen"
+                    android:text="Статистичні показаники"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -77,12 +94,14 @@
                 <TextView
                     android:id="@+id/text_sistolic_var"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/m_dimen" />
 
                 <TextView
                     android:id="@+id/text_diastolic_var"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/m_dimen" />
 
                 <TextView
                     android:id="@+id/text_recomentadions"

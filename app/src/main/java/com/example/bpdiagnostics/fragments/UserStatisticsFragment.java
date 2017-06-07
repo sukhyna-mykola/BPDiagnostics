@@ -89,10 +89,24 @@ public class UserStatisticsFragment extends Fragment {
 
         setData();
 
-        textState.setText("Стан здоровя: " + statisticsHelper.getState());
+        switch (statisticsHelper.getState()) {
+            case 1:
+                textState.setTextColor(Color.BLUE);
+                textState.setText("Хороше");
+                break;
+            case 2:
+                textState.setText("Добре");
+                textState.setTextColor(Color.YELLOW);
+                break;
+            case 3:
+                textState.setText("Погане");
+                textState.setTextColor(Color.RED);
+                break;
+        }
 
-        textSistolic.setText("Нижня від "+statisticsHelper.getMinS()+" до " +statisticsHelper.getMaxS());
-        textDiastolic.setText("Верхня від "+statisticsHelper.getMinD()+" до " +statisticsHelper.getMaxD());
+
+        textSistolic.setText("Нижня від " + statisticsHelper.getMinS() + " до " + statisticsHelper.getMaxS());
+        textDiastolic.setText("Верхня від " + statisticsHelper.getMinD() + " до " + statisticsHelper.getMaxD());
 
         return v;
     }
@@ -170,12 +184,14 @@ public class UserStatisticsFragment extends Fragment {
         columnChartView.setColumnChartData(datacolumns);
 
 
+
         Axis axisYColumn = new Axis();
         axisYColumn.setName("Кількість спостережень");
         axisYColumn.setHasSeparationLine(true);
         datacolumns.setAxisYLeft(axisYColumn);
 
         axisYColumn.setHasTiltedLabels(true);
+        
 
     }
 

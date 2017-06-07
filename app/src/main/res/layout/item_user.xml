@@ -1,45 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:id="@+id/item"
-    android:weightSum="100">
+    android:padding="@dimen/s_dimen">
 
-    <TextView
-        android:id="@+id/text_first_name"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/item"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="20" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:weightSum="100">
 
-    <TextView
-        android:id="@+id/text_last_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="20" />
 
-    <TextView
-        android:id="@+id/text_parent_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="20" />
+        <!--    <TextView
+                android:id="@+id/text_last_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="17" />
 
-    <TextView
-        android:id="@+id/text_birthday"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="10" />
+            <TextView
+                android:id="@+id/text_first_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="17" />
 
-    <TextView
-        android:id="@+id/text_sex"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="5" />
+            <TextView
+                android:id="@+id/text_parent_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="17" />-->
 
-    <TextView
-        android:id="@+id/text_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="25" />
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="3" />
 
-</LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/text_birthday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/text_sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

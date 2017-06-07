@@ -25,10 +25,13 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
             manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
+        getSupportActionBar().setTitle("Вхід");
+
     }
 
     @Override
     public void registration() {
+        getSupportActionBar().setTitle("Реєстрація");
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = RegistarationFragment.newInstance();
         manager.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack("").commit();
@@ -44,6 +47,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
     @Override
     public void cancel() {
+        getSupportActionBar().setTitle("Вхід");
         Fragment fragment = manager.findFragmentById(R.id.fragment_container);
 
         if (fragment != null) {

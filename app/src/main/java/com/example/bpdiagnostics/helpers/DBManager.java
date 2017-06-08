@@ -11,6 +11,8 @@ import com.example.bpdiagnostics.models.UserDataDTO;
 import com.example.bpdiagnostics.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static com.example.bpdiagnostics.database.DBHelper.KEY_BIRTHDAY;
@@ -67,6 +69,48 @@ public class DBManager {
         c.close();
 
         return id;
+    }
+
+    public int getAgeById(long id) {
+        String b = new String();
+        String selection = KEY_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(id)};
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query(TABLE_USERS, new String[]{KEY_BIRTHDAY}, selection, selectionArgs, null, null, null);
+        if (c.moveToFirst()) {
+            int bColumn = c.getColumnIndex(KEY_BIRTHDAY);
+            b = c.getString(bColumn);
+        }
+        c.close();
+
+        int age = 20;
+        if (!b.isEmpty()) {
+            age = calcAge(b);
+        }
+        return age;
+    }
+
+    private int calcAge(String b) {
+        String[] bithtDay = b.split("-");
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d, a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+
+        int _year = Integer.parseInt(bithtDay[2]);
+        int _month = Integer.parseInt(bithtDay[1]);
+        int _day = Integer.parseInt(bithtDay[0]);
+
+        cal.set(_year, _month, _day);
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        return a;
     }
 
     public List<User> getUserByName(String name) {

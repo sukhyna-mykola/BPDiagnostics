@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Діагностика артеріально тиску</string>
+
+    <string-array name="recomendations">
+        </string-array>
+
+
 </resources>

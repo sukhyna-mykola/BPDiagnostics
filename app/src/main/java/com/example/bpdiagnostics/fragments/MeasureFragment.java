@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.bpdiagnostics.NotAllowDataExeption;
 import com.example.bpdiagnostics.R;
 import com.example.bpdiagnostics.helpers.DBManager;
 import com.example.bpdiagnostics.helpers.PreferencesManager;
@@ -176,7 +177,7 @@ public class MeasureFragment extends Fragment {
 
         try {
             String date = editTextDate.getText().toString();
-            if (!(date.length() > 0)) throw new NotAllowDataExeption("Дата введена некоректно");
+            if (!checkCorrectDate(date)) throw new NotAllowDataExeption("Дата введена некоректно");
             int sistolic = Integer.parseInt(editTextSistolic.getText().toString());
             int diastolic = Integer.parseInt(editTextDiastolic.getText().toString());
             if (sistolic < 10 || sistolic > 200 || diastolic < 10 || diastolic > 200)
@@ -198,9 +199,13 @@ public class MeasureFragment extends Fragment {
 
     }
 
-    private class NotAllowDataExeption extends Exception {
-        public NotAllowDataExeption(String message) {
-            super(message);
-        }
+    private boolean checkCorrectDate(String d) {
+
+        String date = new String(d.replaceAll("-", ""));
+        date = new String(date.replaceAll(" ", ""));
+        date = new String(date.replaceAll(":", ""));
+        if (date.isEmpty() || !(date.matches("[0-9]+")))
+            return false;
+        return true;
     }
 }

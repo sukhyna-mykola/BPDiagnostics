@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/s_dimen"
-                android:text="Дата (ДД-ММ-РРР) і час (ЧЧ:ХХ)" />
+                android:text="Дата (ДД-ММ-РРРР) і час (ЧЧ:ХХ)" />
 
             <EditText
                 android:id="@+id/editText_date"

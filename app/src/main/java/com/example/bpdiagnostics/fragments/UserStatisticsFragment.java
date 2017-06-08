@@ -200,7 +200,7 @@ public class UserStatisticsFragment extends Fragment {
 
 
         Axis axisYColumn = new Axis();
-        axisYColumn.setName("Кількість спостережень");
+        axisYColumn.setName("Кількість спостережень %");
         axisYColumn.setHasSeparationLine(true);
         datacolumns.setAxisYLeft(axisYColumn);
 

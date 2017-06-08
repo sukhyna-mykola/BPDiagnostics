@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.bpdiagnostics.R;
+
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -35,9 +37,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String KEY_RECOMENDATION = "recomendation";
 
+    private String[] recomendations  =new String[]{
+            "У вашому стані необхідно негайно звернутись до лікаря. Вам слід приділити увагу своєму стану здоров'я. ",
+    "Вам слід приділити увагу своєму стану здоров'я. Рекомендується випити свіжий сік моркви і петрушки, грейпфрута і апельсина. Виконуйте більше фізичних вправ. Заплануйте віхит до лікаря.",
+    "Ваш стан значно гірше, ніж норма. Вам слід відмовитись від вживання солі, спиртних напоїв та тютюнових виробів. Відпочиньте.",
+    "Ваш стан незначно, але гірше норми. Намайтесь вести більш рухливий спосіб життя. Включіть в свій раціон більше свіжих фруктів та овочів, особливо салат з буряка.",
+    "Ви знаходитесь у своїй нормі. Стан здоров'я є прийнятним для нормального функціонування організму.",
+    "Ваш стан здоров'я є кращим ніж зазвичай і ви можете почуватися вільно у будь-якій ситуації.",
+    "Ваш стан здоров'я є кращим, ніж зазвичай і ви можете ні в чому собі не відмовляти.",
+    "Вам слід приділити увагу своєму стану здоров'я. Рекомендується в середині дня  випивати чашку міцного солодкого чаю або кави. А також приділіть увагу кількості білків та вітамінів Е й групи В у складі вашого раціону харчування.",
+    "У вашому стані необхідно негайно звернутись до лікаря. Вам слід приділити увагу своєму стану здоров'я. Рекомендовано сьогодні поспати більше 8 годин, а вранці влаштуйте собі контрасний душ і пийте більше води! ",
+
+};
 
     public DBHelper(Context context) {
+
         super(context, DB_NAME, null, 1);
+        //recomendations = context.getResources().getStringArray(R.array.recomendations);
     }
 
     @Override
@@ -71,17 +87,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
 
-        cv.put(KEY_ID,1);
-        cv.put(KEY_RECOMENDATION,"Здоровя Відмінне");
-        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
 
-        cv.put(KEY_ID,2);
-        cv.put(KEY_RECOMENDATION,"Здоровя Хороше");
-        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
-
-        cv.put(KEY_ID,3);
-        cv.put(KEY_RECOMENDATION,"Здоровя Погане");
-        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
+        for (int i = 1; i <= recomendations.length; i++) {
+            cv.put(KEY_ID, i);
+            cv.put(KEY_RECOMENDATION, recomendations[i - 1]);
+            db.insert(TABLE_USERS_RECOMENTATIONS, null, cv);
+        }
     }
 
     @Override

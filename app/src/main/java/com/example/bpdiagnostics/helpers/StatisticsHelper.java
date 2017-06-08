@@ -3,7 +3,9 @@ package com.example.bpdiagnostics.helpers;
 import android.content.Context;
 import android.graphics.Color;
 
+import com.example.bpdiagnostics.models.AgePress;
 import com.example.bpdiagnostics.models.UserDataDTO;
+import com.example.bpdiagnostics.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,10 @@ public class StatisticsHelper {
 
     private List<Column> columnValues;
 
-    public final float normaSmin = 110;
-    public final float normaSmax = 135;
-    public final float normaDmin = 80;
-    public final float normaDmax = 90;
+    public float normaSmin = 110;
+    public float normaSmax = 135;
+    public float normaDmin = 80;
+    public float normaDmax = 90;
 
     public final float giperSmin = 140;
     public float giperSmax = 200;
@@ -80,6 +82,7 @@ public class StatisticsHelper {
 
     private void init(long userId) {
         userDataDTOs = (ArrayList<UserDataDTO>) dbManager.getUserData(userId);
+        configureNormData(dbManager.getAgeById(userId));
 
         if (!userDataDTOs.isEmpty()) {
 
@@ -100,8 +103,126 @@ public class StatisticsHelper {
             calcStatistics();
 
             calcState();
+
+            calcRecomendation();
         } else {
             minS = minD = maxD = maxS = 0;
+        }
+    }
+
+    private void calcRecomendation() {
+        int progressState = 0;
+
+        double MS = calcMS();
+        double MD = calcMD();
+
+        double SS = calcSS(MS);
+        double SD = calcSD(MD);
+
+        double lastS = last.get(0).getX();
+        double lastD = last.get(0).getY();
+
+        double PS = 0;
+        double PD = 0;
+
+        boolean leftP = (lastS - PS > 0) ? false : true;
+        boolean leftM = (lastS - MS > 0) ? false : true;
+
+        boolean topP = (lastD - PD < 0) ? false : true;
+        boolean topM = (lastD - MD < 0) ? false : true;
+
+        boolean toPS = (!leftP && leftM) || (leftP && !leftM);
+        boolean toPD = (!topP && topM) || (topP && !topM);
+
+        boolean inHalfS = Math.abs(lastS - MS) > SS / 2 ? false : true;
+        boolean inHalfD = Math.abs(lastD - MD) > SD / 2 ? false : true;
+
+        boolean inS = Math.abs(lastS - MS) > SS ? false : true;
+        boolean inD = Math.abs(lastD - MD) > SD ? false : true;
+
+        boolean inMidleS = !inHalfS && inS;
+        boolean inMidleD = !inHalfD && inD;
+
+
+        if (inHalfD && inHalfS)
+            progressState = 5;
+
+
+        if (!inS && !inD && !toPD && !toPS)
+            progressState = 1;
+
+        if ((!inS && inD && !toPD && !toPS) || (inS && !inD && !toPD && !toPS))
+            progressState = 2;
+
+        if (inS && inD && !toPD && !toPS)
+            progressState = 3;
+
+        if (inS && inD && !toPD && !toPS)
+            progressState = 3;
+
+        if ((inS && inMidleD && !toPD && !toPS) || (inMidleS && inD && !toPD && !toPS))
+            progressState = 4;
+
+
+        if ((inS && inMidleD && toPD && toPS) || (inMidleS && inD && toPD && toPS))
+            progressState = 6;
+
+        if (inS && inD && toPD && toPS)
+            progressState = 7;
+
+        if ((!inS && inD && toPD && toPS) || (inS && !inD && toPD && toPS))
+            progressState = 8;
+
+        if (!inS && !inD && !toPD && !toPS)
+            progressState = 9;
+
+        recomendation = dbManager.getRecomendation(progressState);
+    }
+
+    private double calcSS(double m) {
+        double result = 0;
+        for (UserDataDTO u : userDataDTOs) {
+            result += Math.pow((u.getSistolic() - m), 2);
+        }
+        result = result / (userDataDTOs.size() - 1);
+
+        return Math.sqrt(result);
+    }
+
+    private double calcSD(double m) {
+        double result = 0;
+        for (UserDataDTO u : userDataDTOs) {
+            result += Math.pow((u.getDiastolic() - m), 2);
+        }
+        result = result / (userDataDTOs.size() - 1);
+
+        return Math.sqrt(result);
+
+    }
+
+    private double calcMS() {
+        double result = 0;
+        for (UserDataDTO u : userDataDTOs) {
+            result += u.getSistolic();
+        }
+        return result / userDataDTOs.size();
+    }
+
+    private double calcMD() {
+        double result = 0;
+        for (UserDataDTO u : userDataDTOs) {
+            result += u.getDiastolic();
+        }
+        return result / userDataDTOs.size();
+    }
+
+    private void configureNormData(int age) {
+        AgePress ap = Constants.searchNeedData(age);
+        if (ap != null) {
+            normaSmax = ap.getMaxS();
+            normaDmax = ap.getMaxD();
+            normaSmin = ap.getMinS();
+            normaDmin = ap.getMinD();
         }
     }
 
@@ -169,7 +290,7 @@ public class StatisticsHelper {
 
 
     private void calcStatistics() {
-        int in = 0, out = 0;
+        float in = 0, out = 0;
         columnValues = new ArrayList<>();
         for (UserDataDTO data : userDataDTOs) {
             if (data.getSistolic() > normaSmin && data.getSistolic() < normaSmax &&
@@ -180,8 +301,10 @@ public class StatisticsHelper {
             }
         }
 
-        SubcolumnValue invalue = new SubcolumnValue(in, Color.GREEN);
-        SubcolumnValue outvalue = new SubcolumnValue(out, Color.RED);
+        int inPrecent = (int) Math.ceil(in / (in + out) * 100);
+        int outPercent = 100 - inPrecent;
+        SubcolumnValue invalue = new SubcolumnValue(inPrecent, Color.GREEN);
+        SubcolumnValue outvalue = new SubcolumnValue(outPercent, Color.RED);
 
         List<SubcolumnValue> invalues = new ArrayList<>();
         List<SubcolumnValue> outvalues = new ArrayList<>();
@@ -191,7 +314,10 @@ public class StatisticsHelper {
 
 
         Column inc = new Column(invalues);
+        inc.setHasLabels(true);
+
         Column outc = new Column(outvalues);
+        outc.setHasLabels(true);
 
         columnValues.add(outc);
         columnValues.add(inc);
@@ -251,9 +377,6 @@ public class StatisticsHelper {
 
         } else state = 3;
 
-
-        recomendation = dbManager.getRecomendation(state);
-
     }
 
 
@@ -266,6 +389,9 @@ public class StatisticsHelper {
             maxS = Math.max(maxS, data.getSistolic());
             maxD = Math.max(maxD, data.getDiastolic());
         }
+
+        minS = Math.min(minS, normaSmin);
+        minD = Math.min(minD, normaDmin);
 
         giperSmax = maxS + 30;
         giperDmax = maxD + 10;

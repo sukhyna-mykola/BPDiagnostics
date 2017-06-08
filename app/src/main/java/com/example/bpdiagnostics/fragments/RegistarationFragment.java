@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.bpdiagnostics.NotAllowDataExeption;
 import com.example.bpdiagnostics.R;
 import com.example.bpdiagnostics.RegistrationListener;
 import com.example.bpdiagnostics.helpers.DBManager;
 import com.example.bpdiagnostics.helpers.PreferencesManager;
 import com.example.bpdiagnostics.models.User;
 import com.example.bpdiagnostics.utils.Constants;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -129,6 +134,71 @@ public class RegistarationFragment extends Fragment {
             }
         });
 
+        editTextBirthday.addTextChangedListener(new TextWatcher() {
+
+            private String current = "";
+            private String ddmmyyyy = "ДДММРРРР";
+            private Calendar cal = Calendar.getInstance();
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals(current)) {
+                    String clean = s.toString().replaceAll("[^\\d.]", "");
+                    String cleanC = current.replaceAll("[^\\d.]", "");
+
+                    int cl = clean.length();
+                    int sel = cl;
+                    for (int i = 2; i <= cl && i < 6; i += 2) {
+                        sel++;
+                    }
+                    if (clean.equals(cleanC)) sel--;
+
+                    if (clean.length() < 8) {
+                        clean = clean + ddmmyyyy.substring(clean.length());
+                    } else {
+
+                        int day = Integer.parseInt(clean.substring(0, 2));
+                        int mon = Integer.parseInt(clean.substring(2, 4));
+                        int year = Integer.parseInt(clean.substring(4, 8));
+
+
+                        if (mon > 12) mon = 12;
+                        cal.set(Calendar.MONTH, mon - 1);
+                        year = (year < 1900) ? 1900 : (year > 2100) ? 2100 : year;
+                        cal.set(Calendar.YEAR, year);
+
+
+                        day = (day > cal.getActualMaximum(Calendar.DATE)) ? cal.getActualMaximum(Calendar.DATE) : day;
+                        cal.set(Calendar.DAY_OF_MONTH, day);
+
+
+                        clean = String.format("%02d%02d%02d", day, mon, year);
+                    }
+
+                    clean = String.format("%s-%s-%s",
+                            clean.substring(0, 2),
+                            clean.substring(2, 4),
+                            clean.substring(4, 8)
+                    );
+
+                    sel = sel < 0 ? 0 : sel;
+                    current = clean;
+                    editTextBirthday.setText(current);
+                    editTextBirthday.setSelection(sel < current.length() ? sel : current.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         return v;
     }
@@ -154,38 +224,54 @@ public class RegistarationFragment extends Fragment {
     @OnClick(R.id.button_registration)
     public void registration() {
 
-        String firstName = editTextFirstName.getText().toString();
-        String lastName = editTextLastName.getText().toString();
-        String parentName = editTextParentName.getText().toString();
-        String birthday = editTextBirthday.getText().toString();
-        String email = editTextEmail.getText().toString();
-        String password = editTextEmail.getText().toString();
+        try {
+            String firstName = editTextFirstName.getText().toString();
+            String lastName = editTextLastName.getText().toString();
+            String parentName = editTextParentName.getText().toString();
+            String birthday = editTextBirthday.getText().toString();
+            String email = editTextEmail.getText().toString();
+            String password = editTextPassword.getText().toString();
 
-        int doctor = Constants.DOCTOR_NO;
+            if (!checkCorrectDate(birthday))
+                throw new NotAllowDataExeption("Дата введена некоректно");
 
-        if (editTextDoctorYes.isChecked()) {
-            doctor = Constants.DOCTOR_YES;
+            if (password.length() < 6)
+                throw new NotAllowDataExeption("Довжина пароля має бути більше 6 символів");
+
+            int doctor = Constants.DOCTOR_NO;
+
+            if (editTextDoctorYes.isChecked()) {
+                doctor = Constants.DOCTOR_YES;
+            }
+
+            String sex = Constants.MEN;
+
+            if (editTextWomen.isChecked()) {
+                sex = Constants.WOMEN;
+            }
+
+            User user = new User(firstName, lastName, parentName, birthday, sex, doctor, email, password);
+
+            long id = dbManager.addUser(user);
+
+
+            if (id != -1) {
+                prefManager.saveUserId(id);
+                mListener.signIn(id);
+            } else {
+                Toast.makeText(getContext(), "user did not added, ERROR!!!", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (NotAllowDataExeption e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
 
-        String sex = Constants.MEN;
-
-        if (editTextWomen.isChecked()) {
-            sex = Constants.WOMEN;
-        }
-
-        User user = new User(firstName, lastName, parentName, birthday, sex, doctor, email, password);
-
-        long id = dbManager.addUser(user);
-
-
-        if (id != -1) {
-            prefManager.saveUserId(id);
-            mListener.signIn(id);
-        } else {
-            Toast.makeText(getContext(), "user did not added, ERROR!!!", Toast.LENGTH_SHORT).show();
-        }
-
-
+    private boolean checkCorrectDate(String b) {
+        String birthday = new String(b.replaceAll("-", ""));
+        if (birthday.isEmpty() || !(birthday.matches("[0-9]+")))
+            return false;
+        return true;
     }
 
     @OnClick(R.id.button_cencel)

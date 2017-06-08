@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Введіть Ім’я, прізвище та По-батькові пацієнта" />
+                android:text="Введіть Ім’я, Прізвище та По-батькові пацієнта" />
 
             <EditText
                 android:id="@+id/editText_search_name"

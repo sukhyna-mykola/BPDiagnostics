@@ -26,6 +26,8 @@ public class StatisticsHelper {
     private ArrayList<PointValue> norma;
     private ArrayList<PointValue> giper;
 
+    private ArrayList<PointValue> min;
+
     private ArrayList<PointValue> last;
     private ArrayList<PointValue> average;
 
@@ -37,16 +39,19 @@ public class StatisticsHelper {
     public final float normaDmax = 90;
 
     public final float giperSmin = 140;
-    public final float giperSmax = 200;
+    public float giperSmax = 200;
     public final float giperDmin = 90;
-    public final float giperDmax = 100;
+    public float giperDmax = 100;
 
 
     private float minS = Float.MAX_VALUE, minD = Float.MAX_VALUE, maxS = Float.MIN_VALUE, maxD = Float.MIN_VALUE;
 
     private int state;
+    private String recomendation;
 
-
+    public String getRecomendation() {
+        return recomendation;
+    }
 
     public StatisticsHelper(Context context, long userID) {
         dbManager = DBManager.getInstance(context);
@@ -76,6 +81,7 @@ public class StatisticsHelper {
     private void init(long userId) {
         userDataDTOs = (ArrayList<UserDataDTO>) dbManager.getUserData(userId);
 
+        calcMinMax();
 
         buildEntrys();
 
@@ -85,12 +91,23 @@ public class StatisticsHelper {
         buildLast();
         buildAverage();
 
+        calcMin();
+
         calcAreaSet();
 
         calcStatistics();
 
-        calcMinMax();
+
         calcState();
+    }
+
+    public ArrayList<PointValue> getMin() {
+        return min;
+    }
+
+    private void calcMin() {
+        min = new ArrayList<>();
+        min.add(new PointValue(minS - 20, minD - 10));
     }
 
     public ArrayList<PointValue> getEntry1() {
@@ -159,7 +176,7 @@ public class StatisticsHelper {
             }
         }
 
-        SubcolumnValue invalue = new SubcolumnValue(in, Color.BLUE);
+        SubcolumnValue invalue = new SubcolumnValue(in, Color.GREEN);
         SubcolumnValue outvalue = new SubcolumnValue(out, Color.RED);
 
         List<SubcolumnValue> invalues = new ArrayList<>();
@@ -230,8 +247,10 @@ public class StatisticsHelper {
 
         } else state = 3;
 
-    }
 
+        recomendation = dbManager.getRecomendation(state);
+
+    }
 
 
     private void calcMinMax() {
@@ -243,6 +262,9 @@ public class StatisticsHelper {
             maxS = Math.max(maxS, data.getSistolic());
             maxD = Math.max(maxD, data.getDiastolic());
         }
+
+        giperSmax = maxS + 30;
+        giperDmax = maxD + 10;
     }
 
     private boolean checInsideOrNiarNorm(PointValue av) {

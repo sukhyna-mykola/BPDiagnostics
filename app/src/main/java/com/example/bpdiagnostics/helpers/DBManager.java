@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.bpdiagnostics.database.DBHelper;
 import com.example.bpdiagnostics.models.User;
 import com.example.bpdiagnostics.models.UserDataDTO;
+import com.example.bpdiagnostics.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,13 @@ import static com.example.bpdiagnostics.database.DBHelper.KEY_ID_PATIENT;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_LAST_NAME;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_PARENT_NAME;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_PASSWORD;
+import static com.example.bpdiagnostics.database.DBHelper.KEY_RECOMENDATION;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_SEX;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_SISTOLIC;
 import static com.example.bpdiagnostics.database.DBHelper.KEY_STATE;
 import static com.example.bpdiagnostics.database.DBHelper.TABLE_USERS;
 import static com.example.bpdiagnostics.database.DBHelper.TABLE_USERS_DATA;
+import static com.example.bpdiagnostics.database.DBHelper.TABLE_USERS_RECOMENTATIONS;
 
 
 public class DBManager {
@@ -69,8 +72,11 @@ public class DBManager {
     public List<User> getUserByName(String name) {
         List<User> result = new ArrayList<>();
 
+
+        String selection = KEY_DOCTOR + " = ? ";
+        String[] selectionArgs = new String[]{String.valueOf(Constants.DOCTOR_NO)};
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query(TABLE_USERS, null, null, null, null, null, null);
+        Cursor c = db.query(TABLE_USERS, null, selection, selectionArgs, null, null, null);
         if (c.moveToFirst()) {
             int idColumn = c.getColumnIndex(KEY_ID);
             int firstNameColumn = c.getColumnIndex(KEY_FIRST_NAME);
@@ -211,43 +217,18 @@ public class DBManager {
     }
 
 
-    /**
-     * Видаляє всі записи з бази даних
-     */
-    public void clearDB() {
+    public String getRecomendation(long id) {
+        String recomendation = "Дані відсутні";
+
+        String selection = KEY_ID + " = ? ";
+        String[] selectionArgs = new String[]{String.valueOf(id)};
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TABLE_USERS, null, null);
-        db.close();
+        Cursor c = db.query(TABLE_USERS_RECOMENTATIONS, new String[]{KEY_RECOMENDATION}, selection, selectionArgs, null, null, null);
+        if (c.moveToFirst()) {
+            int recomendationColumn = c.getColumnIndex(KEY_RECOMENDATION);
+            recomendation = c.getString(recomendationColumn);
+        }
+        c.close();
+        return recomendation;
     }
-
-    /**
-     * Видаляє запис з бази даних по фільтру
-     *//*
-    public void removeLessonFromDB(LessonDTO lesson) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(Constants.TABLE_NAME,Constants.LESSON_WEEK+"=? AND "+Constants.DAY_NUMBER +
-                "=? AND "+Constants.LESSON_NUMBER+"=?",new String[]{lesson.getLessonWeek(),lesson.getDayNumber(),lesson.getLessonNumber()});
-        db.close();
-    }
-
-    *//**
-     * Оновлює запис в базі по фільтру
-     * @param lesson
-     *//*
-    public void updateLessonInDB(LessonDTO lesson) {
-        ContentValues cv = new ContentValues();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        cv.put(Constants.TEACHER_NAME, lesson.getTeacherName());
-        cv.put(Constants.LESSON_NAME, lesson.getLessonName());
-        cv.put(Constants.LESSON_NUMBER, lesson.getLessonNumber());
-        cv.put(Constants.LESSON_ROOM, lesson.getLessonRoom());
-        cv.put(Constants.LESSON_TYPE, lesson.getLessonType());
-        cv.put(Constants.DAY_NUMBER, lesson.getDayNumber());
-        cv.put(Constants.LESSON_WEEK, lesson.getLessonWeek());
-
-        db.update(Constants.TABLE_NAME,cv,Constants.LESSON_WEEK+"=? AND "+Constants.DAY_NUMBER +
-                "=? AND "+Constants.LESSON_NUMBER+"=?",new String[]{lesson.getLessonWeek(),lesson.getDayNumber(),lesson.getLessonNumber()});
-        db.close();
-    }*/
 }

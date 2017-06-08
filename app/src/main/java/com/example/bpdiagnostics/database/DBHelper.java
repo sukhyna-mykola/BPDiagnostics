@@ -1,5 +1,6 @@
 package com.example.bpdiagnostics.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,6 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_USERS = "users";
     public static final String TABLE_USERS_DATA = "users_data";
+    public static final String TABLE_USERS_RECOMENTATIONS = "users_recomendations";
 
     public static final String INTEGER = "integer";
     public static final String TEXT = "text";
@@ -30,6 +32,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_DIASTOLIC = "diastolic";
     public static final String KEY_DATE = "key_date";
     public static final String KEY_STATE = "state";
+
+    public static final String KEY_RECOMENDATION = "recomendation";
 
 
     public DBHelper(Context context) {
@@ -59,6 +63,25 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_STATE + " " + INTEGER + ","
                 + KEY_DATE + " " + TEXT
                 + ");");
+
+        db.execSQL("create table " + TABLE_USERS_RECOMENTATIONS + " ("
+                + KEY_ID + " " + INTEGER + " PRIMARY KEY ,"
+                + KEY_RECOMENDATION + " " + TEXT
+                + ");");
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(KEY_ID,1);
+        cv.put(KEY_RECOMENDATION,"Здоровя Відмінне");
+        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
+
+        cv.put(KEY_ID,2);
+        cv.put(KEY_RECOMENDATION,"Здоровя Хороше");
+        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
+
+        cv.put(KEY_ID,3);
+        cv.put(KEY_RECOMENDATION,"Здоровя Погане");
+        db.insert(TABLE_USERS_RECOMENTATIONS,null,cv);
     }
 
     @Override

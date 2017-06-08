@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bpdiagnostics.OnFragmentSearchLisntener;
@@ -19,11 +21,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -39,6 +43,12 @@ public class UserStatisticsFragment extends Fragment {
     TextView textSistolic;
     @BindView(R.id.text_diastolic_var)
     TextView textDiastolic;
+    @BindView(R.id.text_recomentadions)
+    TextView textRecomendation;
+    @BindView(R.id.button_map)
+    ImageButton buttonMap;
+    @BindView(R.id.card_map)
+    CardView cardMap;
 
 
     private Unbinder unbinder;
@@ -91,7 +101,7 @@ public class UserStatisticsFragment extends Fragment {
 
         switch (statisticsHelper.getState()) {
             case 1:
-                textState.setTextColor(Color.BLUE);
+                textState.setTextColor(Color.GREEN);
                 textState.setText("Хороше");
                 break;
             case 2:
@@ -104,6 +114,8 @@ public class UserStatisticsFragment extends Fragment {
                 break;
         }
 
+
+        textRecomendation.setText(statisticsHelper.getRecomendation());
 
         textSistolic.setText("Нижня від " + statisticsHelper.getMinS() + " до " + statisticsHelper.getMaxS());
         textDiastolic.setText("Верхня від " + statisticsHelper.getMinD() + " до " + statisticsHelper.getMaxD());
@@ -133,20 +145,21 @@ public class UserStatisticsFragment extends Fragment {
     private void setData() {
 
 
-        //In most cased you can call data model methods in builder-pattern-like manner.
-        Line linenorma = new Line(statisticsHelper.getNorma()).setColor(Color.BLUE).setFilled(true).setHasPoints(false);
-        Line linegiper = new Line(statisticsHelper.getGiper()).setColor(Color.RED).setFilled(true).setHasPoints(false);
+        Line linenorma = new Line(statisticsHelper.getNorma()).setColor(Color.BLUE).setFilled(true).setHasPoints(false).setStrokeWidth(0);
+        Line linegiper = new Line(statisticsHelper.getGiper()).setColor(Color.RED).setFilled(true).setHasPoints(false).setStrokeWidth(0);
 
 
-        Line line1 = new Line(statisticsHelper.getEntry1()).setColor(Color.GREEN).setHasLines(false);
-        Line line2 = new Line(statisticsHelper.getEntry2()).setColor(Color.YELLOW).setHasLines(false);
-        Line line3 = new Line(statisticsHelper.getEntry3()).setColor(Color.RED).setHasLines(false);
+        Line line1 = new Line(statisticsHelper.getEntry1()).setColor(Color.GREEN).setHasLines(false).setPointRadius(4);
+        Line line2 = new Line(statisticsHelper.getEntry2()).setColor(Color.YELLOW).setHasLines(false).setPointRadius(4);
+        Line line3 = new Line(statisticsHelper.getEntry3()).setColor(Color.RED).setHasLines(false).setPointRadius(4);
 
-        Line average = new Line(statisticsHelper.getAverage()).setColor(Color.BLACK).setHasLines(false).setPointRadius(10);
-        Line last = new Line(statisticsHelper.getLast()).setColor(Color.CYAN).setHasLines(false).setPointRadius(10);
+        Line minPoint = new Line(statisticsHelper.getMin()).setHasLines(false).setHasPoints(false);
+
+        Line average = new Line(statisticsHelper.getAverage()).setColor(Color.parseColor("#FF9800")).setHasLines(false).setPointRadius(6).setShape(ValueShape.DIAMOND);
+        Line last = new Line(statisticsHelper.getLast()).setColor(Color.CYAN).setHasLines(false).setPointRadius(5).setShape(ValueShape.DIAMOND);
 
         Line lineAll = new Line(statisticsHelper.getEntryAll()).setColor(Color.GRAY).setFilled(true)
-                .setPointColor(Color.GRAY).setPointRadius(3);
+                .setPointColor(Color.GRAY).setPointRadius(1).setStrokeWidth(0);
 
 
         List<Line> lines = new ArrayList<Line>();
@@ -157,6 +170,8 @@ public class UserStatisticsFragment extends Fragment {
         lines.add(line1);
         lines.add(line2);
         lines.add(line3);
+
+        lines.add(minPoint);
 
         lines.add(average);
         lines.add(last);
@@ -184,15 +199,25 @@ public class UserStatisticsFragment extends Fragment {
         columnChartView.setColumnChartData(datacolumns);
 
 
-
         Axis axisYColumn = new Axis();
         axisYColumn.setName("Кількість спостережень");
         axisYColumn.setHasSeparationLine(true);
         datacolumns.setAxisYLeft(axisYColumn);
 
         axisYColumn.setHasTiltedLabels(true);
-        
+
 
     }
 
+
+    @OnClick(R.id.button_map)
+    public void search() {
+        if (cardMap.getVisibility() == View.VISIBLE) {
+            cardMap.setVisibility(View.GONE);
+            buttonMap.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+        } else {
+            cardMap.setVisibility(View.VISIBLE);
+            buttonMap.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        }
+    }
 }

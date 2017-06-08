@@ -45,6 +45,8 @@
                 android:layout_weight="1"
                 android:text="Пошук" />
 
+            <include layout="@layout/item_user" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/users_list"
                 android:layout_width="match_parent"

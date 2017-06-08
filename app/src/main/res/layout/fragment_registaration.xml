@@ -5,9 +5,10 @@
     tools:context="com.example.bpdiagnostics.fragments.RegistarationFragment">
 
     <ScrollView
-        android:padding="@dimen/m_dimen"
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/m_dimen">
 
 
         <android.support.v7.widget.CardView
@@ -77,6 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Чоловік" />
 
                     <CheckBox
@@ -84,7 +86,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checked="true"
                         android:text="Жінка" />
 
                 </LinearLayout>
@@ -129,6 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="ні" />
 
                     <CheckBox
@@ -150,7 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Реєстрація" />
+                        android:text="Зарееструватись" />
 
                     <Button
                         android:id="@+id/button_cencel"

@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.example.bpdiagnostics.fragments.AboutFragment;
 import com.example.bpdiagnostics.fragments.MeasureFragment;
@@ -200,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSearchL
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.exit) {
+           // PreferencesManager.getInstance(this).saveUserId(-1);
             startActivityForResult(new Intent(this, RegistrationActivity.class), REQUEST_CODE);
             return true;
         }

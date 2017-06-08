@@ -2,6 +2,8 @@ package com.example.bpdiagnostics.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.example.bpdiagnostics.models.UserDataDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,6 +87,7 @@ public class MeasureFragment extends Fragment {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             }
@@ -94,6 +98,75 @@ public class MeasureFragment extends Fragment {
             }
         });
 
+        editTextDate.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+            private String ddmmyyyy = "ДДММРРРРЧЧХХ";
+            private Calendar cal = Calendar.getInstance();
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals(current)) {
+                    String clean = s.toString().replaceAll("[^\\d.]", "");
+                    String cleanC = current.replaceAll("[^\\d.]", "");
+
+                    int cl = clean.length();
+                    int sel = cl;
+                    for (int i = 2; i <= cl && i < 10; i += 2) {
+                        sel++;
+                    }
+                    if (clean.equals(cleanC)) sel--;
+
+                    if (clean.length() < 12) {
+                        clean = clean + ddmmyyyy.substring(clean.length());
+                    } else {
+
+                        int day = Integer.parseInt(clean.substring(0, 2));
+                        int mon = Integer.parseInt(clean.substring(2, 4));
+                        int year = Integer.parseInt(clean.substring(4, 8));
+                        int hour = Integer.parseInt(clean.substring(8, 10));
+                        int minite = Integer.parseInt(clean.substring(10, 12));
+
+                        if (mon > 12) mon = 12;
+                        cal.set(Calendar.MONTH, mon - 1);
+                        year = (year < 1900) ? 1900 : (year > 2100) ? 2100 : year;
+                        cal.set(Calendar.YEAR, year);
+
+
+                        day = (day > cal.getActualMaximum(Calendar.DATE)) ? cal.getActualMaximum(Calendar.DATE) : day;
+                        cal.set(Calendar.DAY_OF_MONTH, day);
+                        if (hour > 23) hour = 23;
+                        cal.set(Calendar.HOUR_OF_DAY, hour);
+
+                        if (minite > 59) minite = 59;
+                        cal.set(Calendar.MINUTE, minite);
+
+                        clean = String.format("%02d%02d%02d%02d%02d", day, mon, year, hour, minite);
+                    }
+
+                    clean = String.format("%s-%s-%s %s:%s", clean.substring(0, 2),
+                            clean.substring(2, 4),
+                            clean.substring(4, 8),
+                            clean.substring(8, 10),
+                            clean.substring(10, 12)
+                    );
+
+                    sel = sel < 0 ? 0 : sel;
+                    current = clean;
+                    editTextDate.setText(current);
+                    editTextDate.setSelection(sel < current.length() ? sel : current.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return v;
     }
 
@@ -101,16 +174,33 @@ public class MeasureFragment extends Fragment {
     @OnClick(R.id.button_save_data)
     public void saveData() {
 
-        String date = editTextDate.getText().toString();
-        int sistolic = Integer.parseInt(editTextSistolic.getText().toString());
-        int diastolic = Integer.parseInt(editTextDiastolic.getText().toString());
-        int state = spinner.getSelectedItemPosition() + 1;
+        try {
+            String date = editTextDate.getText().toString();
+            if (!(date.length() > 0)) throw new NotAllowDataExeption("Дата введена некоректно");
+            int sistolic = Integer.parseInt(editTextSistolic.getText().toString());
+            int diastolic = Integer.parseInt(editTextDiastolic.getText().toString());
+            if (sistolic < 10 || sistolic > 200 || diastolic < 10 || diastolic > 200)
+                throw new NotAllowDataExeption("Введені дані не допустимі. Перевірте і спробуйте знову");
 
-        if (id != -1) {
-            UserDataDTO dataDTO = new UserDataDTO(id, date, sistolic, diastolic, state);
-            long dataId = dbManager.addUserData(dataDTO);
-            Toast.makeText(getContext(), "dataId = "+dataId, Toast.LENGTH_SHORT).show();
+            int state = spinner.getSelectedItemPosition() + 1;
+
+            if (id != -1) {
+                UserDataDTO dataDTO = new UserDataDTO(id, date, sistolic, diastolic, state);
+                dbManager.addUserData(dataDTO);
+                Toast.makeText(getContext(), "Додано в базу", Toast.LENGTH_SHORT).show();
+            }
+        } catch (NotAllowDataExeption e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Некоректні дані", Toast.LENGTH_SHORT).show();
         }
 
+
+    }
+
+    private class NotAllowDataExeption extends Exception {
+        public NotAllowDataExeption(String message) {
+            super(message);
+        }
     }
 }

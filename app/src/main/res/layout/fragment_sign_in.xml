@@ -21,7 +21,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/m_dimen"
+                android:paddingRight="@dimen/m_dimen"
+                android:paddingTop="@dimen/m_dimen"
                 android:text="Електронна пошта" />
 
             <EditText
@@ -29,16 +30,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="(електронна пошта)"
                 android:inputType="textEmailAddress"
-                android:paddingBottom="@dimen/m_dimen"
-                android:paddingLeft="@dimen/m_dimen"
-                android:paddingRight="@dimen/m_dimen" />
+                android:paddingBottom="@dimen/m_dimen" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/m_dimen"
+                android:paddingRight="@dimen/m_dimen"
+                android:paddingTop="@dimen/m_dimen"
                 android:text="Пароль" />
 
             <EditText
@@ -47,9 +46,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:paddingBottom="@dimen/m_dimen"
-                android:paddingLeft="@dimen/m_dimen"
-                android:paddingRight="@dimen/m_dimen" />
+                android:paddingBottom="@dimen/m_dimen" />
 
 
             <GridLayout

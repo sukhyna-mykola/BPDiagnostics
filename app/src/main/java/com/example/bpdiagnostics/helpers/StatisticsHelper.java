@@ -81,24 +81,28 @@ public class StatisticsHelper {
     private void init(long userId) {
         userDataDTOs = (ArrayList<UserDataDTO>) dbManager.getUserData(userId);
 
-        calcMinMax();
+        if (!userDataDTOs.isEmpty()) {
 
-        buildEntrys();
+            calcMinMax();
 
-        buildNorma();
-        buildGiper();
+            buildEntrys();
 
-        buildLast();
-        buildAverage();
+            buildNorma();
+            buildGiper();
 
-        calcMin();
+            buildLast();
+            buildAverage();
 
-        calcAreaSet();
+            calcMin();
 
-        calcStatistics();
+            calcAreaSet();
 
+            calcStatistics();
 
-        calcState();
+            calcState();
+        } else {
+            minS = minD = maxD = maxS = 0;
+        }
     }
 
     public ArrayList<PointValue> getMin() {

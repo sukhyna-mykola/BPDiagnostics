@@ -1,12 +1,13 @@
 package com.example.bpdiagnostics;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.bpdiagnostics.models.User;
@@ -41,7 +42,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final User user = users.get(position);
 /*
         holder.textFirstName.setText(user.getFirstName());
@@ -51,10 +52,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         holder.textEmail.setText(user.getEmail());
         holder.textBirthday.setText(user.getBirhday());
         holder.textSex.setText(user.getSex());
+        holder.item.setCardBackgroundColor(Color.WHITE);
 
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.item.setCardBackgroundColor(Color.LTGRAY);
                 lisntener.showUserFragment(user.getId());
             }
         });
@@ -86,7 +89,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         @BindView(R.id.text_email)
         TextView textEmail;
         @BindView(R.id.item)
-        LinearLayout item;
+        CardView item;
 
 
         public ViewHolder(View v) {

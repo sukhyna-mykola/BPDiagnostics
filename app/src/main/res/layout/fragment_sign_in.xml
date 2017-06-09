@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/m_dimen"
                 android:paddingTop="@dimen/m_dimen"
-                android:text="Електронна пошта" />
+                android:text="@string/email" />
 
             <EditText
                 android:id="@+id/editText_email"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/m_dimen"
                 android:paddingTop="@dimen/m_dimen"
-                android:text="Пароль" />
+                android:text="@string/password" />
 
             <EditText
                 android:id="@+id/editText_password"
@@ -60,13 +60,13 @@
                 <Button
                     android:id="@+id/button_sign_in"
                     android:layout_gravity="fill_horizontal"
-                    android:text="Вхід" />
+                    android:text="@string/sign_in" />
 
 
                 <Button
                     android:id="@+id/button_registration"
                     android:layout_gravity="fill_horizontal"
-                    android:text="Реєстрація" />
+                    android:text="@string/registration" />
 
             </GridLayout>
         </LinearLayout>

@@ -25,7 +25,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Прізвище" />
+                    android:text="@string/last_name" />
 
                 <EditText
                     android:id="@+id/editText_last_name"
@@ -36,7 +36,7 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ім’я" />
+                    android:text="@string/first_name" />
 
                 <EditText
                     android:id="@+id/editText_first_name"
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="По-батькові" />
+                    android:text="@string/parent_name" />
 
                 <EditText
                     android:id="@+id/editText_parent_name"
@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Дата народження" />
+                    android:text="@string/birthday" />
 
                 <EditText
                     android:id="@+id/editText_birthday"
@@ -66,7 +66,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Вкажіть стать" />
+                    android:text="@string/input_sex" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -79,21 +79,21 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="Чоловік" />
+                        android:text="@string/male" />
 
                     <CheckBox
                         android:id="@+id/checkBox_women"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Жінка" />
+                        android:text="@string/female" />
 
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Електронна пошта" />
+                    android:text="@string/email" />
 
                 <EditText
 
@@ -106,7 +106,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Пароль" />
+                    android:text="@string/password" />
 
                 <EditText
                     android:id="@+id/editText_password"
@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ви лікар?" />
+                    android:text="@string/you_doctor" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,14 +131,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="ні" />
+                        android:text="@string/no" />
 
                     <CheckBox
                         android:id="@+id/checkBox_doctor_yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="так" />
+                        android:text="@string/yes" />
 
                 </LinearLayout>
 
@@ -152,14 +152,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Зарееструватись" />
+                        android:text="@string/registration" />
 
                     <Button
                         android:id="@+id/button_cencel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Відмінити" />
+                        android:text="@string/cencel" />
 
                 </LinearLayout>
             </LinearLayout>

@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Пошук пацієнта"
+        android:text="@string/search_patient"
         android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Введіть Ім’я, Прізвище та По-батькові пацієнта" />
+                android:text="@string/input_name" />
 
             <EditText
                 android:id="@+id/editText_search_name"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Пошук" />
+                android:text="@string/search" />
 
             <include layout="@layout/item_user" />
 

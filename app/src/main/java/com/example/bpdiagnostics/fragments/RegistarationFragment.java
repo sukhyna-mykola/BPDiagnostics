@@ -137,7 +137,7 @@ public class RegistarationFragment extends Fragment {
         editTextBirthday.addTextChangedListener(new TextWatcher() {
 
             private String current = "";
-            private String ddmmyyyy = "ДДММРРРР";
+            private String ddmmyyyy = "        ";
             private Calendar cal = Calendar.getInstance();
 
             @Override
@@ -233,10 +233,10 @@ public class RegistarationFragment extends Fragment {
             String password = editTextPassword.getText().toString();
 
             if (!checkCorrectDate(birthday))
-                throw new NotAllowDataExeption("Дата введена некоректно");
+                throw new NotAllowDataExeption(getResources().getString(R.string.error_date_incorrect));
 
             if (password.length() < 6)
-                throw new NotAllowDataExeption("Довжина пароля має бути більше 6 символів");
+                throw new NotAllowDataExeption(getString(R.string.error_password));
 
             int doctor = Constants.DOCTOR_NO;
 

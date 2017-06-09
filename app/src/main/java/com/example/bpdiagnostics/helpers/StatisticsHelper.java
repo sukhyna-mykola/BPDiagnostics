@@ -33,7 +33,17 @@ public class StatisticsHelper {
     private ArrayList<PointValue> last;
     private ArrayList<PointValue> average;
 
-    private List<Column> columnValues;
+    private List<SubcolumnValue> columnIn;
+    private List<SubcolumnValue> columnOut;
+
+    public List<SubcolumnValue> getColumnOut() {
+        return columnOut;
+    }
+
+    public List<SubcolumnValue> getColumnIn() {
+        return columnIn;
+    }
+
 
     public float normaSmin = 110;
     public float normaSmax = 135;
@@ -47,6 +57,11 @@ public class StatisticsHelper {
 
 
     private float minS = Float.MAX_VALUE, minD = Float.MAX_VALUE, maxS = Float.MIN_VALUE, maxD = Float.MIN_VALUE;
+    private float MS, MD, SS, SD;
+    private float lastS, lastD;
+    private int inNorma, inGiper;
+
+    private int count;
 
     private int state;
     private String recomendation;
@@ -60,9 +75,6 @@ public class StatisticsHelper {
         init(userID);
     }
 
-    public List<Column> getColumnValues() {
-        return columnValues;
-    }
 
     public float getMinS() {
         return minS;
@@ -82,11 +94,13 @@ public class StatisticsHelper {
 
     private void init(long userId) {
         userDataDTOs = (ArrayList<UserDataDTO>) dbManager.getUserData(userId);
-        configureNormData(dbManager.getAgeById(userId));
+        count = userDataDTOs.size();
 
-        if (!userDataDTOs.isEmpty()) {
+        if (count > 0) {
 
-            calcMinMax();
+            int age = dbManager.getAgeById(userId);
+
+            configureParemeters(age);
 
             buildEntrys();
 
@@ -96,143 +110,22 @@ public class StatisticsHelper {
             buildLast();
             buildAverage();
 
-            calcMin();
+            buildMin();
+            buildAreaSet();
 
-            calcAreaSet();
-
-            calcStatistics();
+            calcColumnStatistics();
 
             calcState();
 
-            calcRecomendation();
+            calcRecomendation(age);
         } else {
             minS = minD = maxD = maxS = 0;
         }
     }
 
-    private void calcRecomendation() {
-        int progressState = 0;
-
-        double MS = calcMS();
-        double MD = calcMD();
-
-        double SS = calcSS(MS);
-        double SD = calcSD(MD);
-
-        double lastS = last.get(0).getX();
-        double lastD = last.get(0).getY();
-
-        double PS = 0;
-        double PD = 0;
-
-        boolean leftP = (lastS - PS > 0) ? false : true;
-        boolean leftM = (lastS - MS > 0) ? false : true;
-
-        boolean topP = (lastD - PD < 0) ? false : true;
-        boolean topM = (lastD - MD < 0) ? false : true;
-
-        boolean toPS = (!leftP && leftM) || (leftP && !leftM);
-        boolean toPD = (!topP && topM) || (topP && !topM);
-
-        boolean inHalfS = Math.abs(lastS - MS) > SS / 2 ? false : true;
-        boolean inHalfD = Math.abs(lastD - MD) > SD / 2 ? false : true;
-
-        boolean inS = Math.abs(lastS - MS) > SS ? false : true;
-        boolean inD = Math.abs(lastD - MD) > SD ? false : true;
-
-        boolean inMidleS = !inHalfS && inS;
-        boolean inMidleD = !inHalfD && inD;
-
-
-        if (inHalfD && inHalfS)
-            progressState = 5;
-
-
-        if (!inS && !inD && !toPD && !toPS)
-            progressState = 1;
-
-        if ((!inS && inD && !toPD && !toPS) || (inS && !inD && !toPD && !toPS))
-            progressState = 2;
-
-        if (inS && inD && !toPD && !toPS)
-            progressState = 3;
-
-        if (inS && inD && !toPD && !toPS)
-            progressState = 3;
-
-        if ((inS && inMidleD && !toPD && !toPS) || (inMidleS && inD && !toPD && !toPS))
-            progressState = 4;
-
-
-        if ((inS && inMidleD && toPD && toPS) || (inMidleS && inD && toPD && toPS))
-            progressState = 6;
-
-        if (inS && inD && toPD && toPS)
-            progressState = 7;
-
-        if ((!inS && inD && toPD && toPS) || (inS && !inD && toPD && toPS))
-            progressState = 8;
-
-        if (!inS && !inD && !toPD && !toPS)
-            progressState = 9;
-
-        recomendation = dbManager.getRecomendation(progressState);
-    }
-
-    private double calcSS(double m) {
-        double result = 0;
-        for (UserDataDTO u : userDataDTOs) {
-            result += Math.pow((u.getSistolic() - m), 2);
-        }
-        result = result / (userDataDTOs.size() - 1);
-
-        return Math.sqrt(result);
-    }
-
-    private double calcSD(double m) {
-        double result = 0;
-        for (UserDataDTO u : userDataDTOs) {
-            result += Math.pow((u.getDiastolic() - m), 2);
-        }
-        result = result / (userDataDTOs.size() - 1);
-
-        return Math.sqrt(result);
-
-    }
-
-    private double calcMS() {
-        double result = 0;
-        for (UserDataDTO u : userDataDTOs) {
-            result += u.getSistolic();
-        }
-        return result / userDataDTOs.size();
-    }
-
-    private double calcMD() {
-        double result = 0;
-        for (UserDataDTO u : userDataDTOs) {
-            result += u.getDiastolic();
-        }
-        return result / userDataDTOs.size();
-    }
-
-    private void configureNormData(int age) {
-        AgePress ap = Constants.searchNeedData(age);
-        if (ap != null) {
-            normaSmax = ap.getMaxS();
-            normaDmax = ap.getMaxD();
-            normaSmin = ap.getMinS();
-            normaDmin = ap.getMinD();
-        }
-    }
 
     public ArrayList<PointValue> getMin() {
         return min;
-    }
-
-    private void calcMin() {
-        min = new ArrayList<>();
-        min.add(new PointValue(minS - 20, minD - 10));
     }
 
     public ArrayList<PointValue> getEntry1() {
@@ -267,120 +160,74 @@ public class StatisticsHelper {
         return average;
     }
 
-    private void buildAverage() {
-        float s = 0, d = 0;
-        average = new ArrayList<>();
-        for (UserDataDTO data : userDataDTOs) {
-            s += data.getSistolic();
-            d += data.getDiastolic();
-        }
-        s /= userDataDTOs.size();
-        d /= userDataDTOs.size();
-        average.add(new PointValue(s, d));
-
-    }
-
-    private void buildLast() {
-        last = new ArrayList<>();
-        if (userDataDTOs.size() > 0) {
-            UserDataDTO lastData = userDataDTOs.get(userDataDTOs.size() - 1);
-            last.add(new PointValue(lastData.getSistolic(), lastData.getDiastolic()));
-        }
-    }
-
-
-    private void calcStatistics() {
-        float in = 0, out = 0;
-        columnValues = new ArrayList<>();
-        for (UserDataDTO data : userDataDTOs) {
-            if (data.getSistolic() > normaSmin && data.getSistolic() < normaSmax &&
-                    data.getDiastolic() > normaDmin && data.getDiastolic() < normaDmax) {
-                in++;
-            } else {
-                out++;
-            }
-        }
-
-        int inPrecent = (int) Math.ceil(in / (in + out) * 100);
-        int outPercent = 100 - inPrecent;
-        SubcolumnValue invalue = new SubcolumnValue(inPrecent, Color.GREEN);
-        SubcolumnValue outvalue = new SubcolumnValue(outPercent, Color.RED);
-
-        List<SubcolumnValue> invalues = new ArrayList<>();
-        List<SubcolumnValue> outvalues = new ArrayList<>();
-
-        invalues.add(invalue);
-        outvalues.add(outvalue);
-
-
-        Column inc = new Column(invalues);
-        inc.setHasLabels(true);
-
-        Column outc = new Column(outvalues);
-        outc.setHasLabels(true);
-
-        columnValues.add(outc);
-        columnValues.add(inc);
-
-    }
-
     public int getState() {
         return state;
     }
 
-    private void calcState() {
 
-        float inNorm = 0, outNorm = 0;
-        for (UserDataDTO data : userDataDTOs) {
-            if (data.getSistolic() > normaSmin && data.getSistolic() < normaSmax &&
-                    data.getDiastolic() > normaDmin && data.getDiastolic() < normaDmax) {
-                inNorm++;
-            } else {
-                outNorm++;
-            }
-        }
+    private void buildMin() {
+        min = new ArrayList<>();
+        min.add(new PointValue(minS - 20, minD - 10));
+    }
 
-        float inNormPercent = inNorm / (inNorm + outNorm);//%
-        float outNormPercent = outNorm / (inNorm + outNorm);
+    private void buildAverage() {
+        average = new ArrayList<>();
+        average.add(new PointValue(MS, MD));
+    }
 
-
-        float inGiper = 0, outGiper = 0;
-        for (UserDataDTO data : userDataDTOs) {
-            if (data.getSistolic() > giperSmin && data.getDiastolic() > giperDmin) {
-                inGiper++;
-            } else {
-                outGiper++;
-            }
-        }
-
-
-        float inGiperPercent = inGiper / (inGiper + outGiper);
-        float outGiperPrecent = outGiper / (inGiper + outGiper);
-
-        PointValue av = average.get(0);
-        PointValue l = last.get(0);
-
-        int e = 10;
-
-        if ((inNormPercent > 0.5)
-                && (av.getX() > normaSmin && av.getX() < normaSmax && av.getY() > normaDmin && av.getY() < normaDmax)
-                && (Math.abs(l.getX() - av.getX()) < e && Math.abs(l.getY() - av.getY()) < e)
-                && (inGiper == 0)) {
-            state = 1;
-        } else if ((inNormPercent > 0.4) &&
-                ((av.getX() > normaSmin && av.getX() < normaSmax &&
-                        av.getY() > normaDmin && av.getY() < normaDmax) || checInsideOrNiarNorm(av)) &&
-                (Math.abs(l.getX() - av.getX()) < 2 * e && Math.abs(l.getY() - av.getY()) < 2 * e) &&
-                (inGiper < 5) &&
-                (maxS - minS < 50)) {
-            state = 2;
-
-        } else state = 3;
+    private void buildLast() {
+        last = new ArrayList<>();
+        last.add(new PointValue(lastS, lastD));
 
     }
 
 
-    private void calcMinMax() {
+    private void calcColumnStatistics() {
+        columnIn = new ArrayList<>();
+        columnOut = new ArrayList<>();
+
+        int inPrecent = (int) Math.ceil(((float) inNorma) / count * 100);
+        int outPercent = 100 - inPrecent;
+
+        columnIn.add(new SubcolumnValue(inPrecent, Color.GREEN));
+        columnOut.add(new SubcolumnValue(outPercent, Color.RED));
+
+    }
+
+
+    private void calcState() {
+
+        float inNormPercent = (((float) inNorma) / count) * 100;
+
+        int e = 10;
+
+        state = 3;
+
+        if ((inNormPercent > 40) &&//40%
+                ((MS > normaSmin && MS < normaSmax &&
+                        MD > normaDmin && MD < normaDmax) || checInsideOrNiarNorm()) &&
+                (Math.abs(lastS - MS) < 2 * e && Math.abs(lastD - MD) < 2 * e) &&
+                (inGiper < 5) &&
+                (maxS - minS < 50)) {
+            state = 2;
+
+        }
+
+        if ((inNormPercent > 50)//50%
+
+                && (MS > normaSmin && MS < normaSmax && MD > normaDmin && MD < normaDmax)
+
+                && (Math.abs(lastS - MS) < e && Math.abs(lastD - MD) < e)
+
+                && (inGiper == 0)) {
+            state = 1;
+        }
+
+
+    }
+
+
+    private void configureParemeters(int age) {
 
         for (UserDataDTO data : userDataDTOs) {
             minS = Math.min(minS, data.getSistolic());
@@ -392,29 +239,68 @@ public class StatisticsHelper {
 
         minS = Math.min(minS, normaSmin);
         minD = Math.min(minD, normaDmin);
+        //-----------------
+        AgePress ap = Constants.searchNeedData(age);
+        if (ap != null) {
+            normaSmax = ap.getMaxS();
+            normaDmax = ap.getMaxD();
+            normaSmin = ap.getMinS();
+            normaDmin = ap.getMinD();
+        }
+        //---------------------
 
         giperSmax = maxS + 30;
         giperDmax = maxD + 10;
+
+        //-----------------------
+
+        calcM();
+        calcD();
+        //-----------------
+
+        for (UserDataDTO data : userDataDTOs) {
+            if (data.getSistolic() > normaSmin && data.getSistolic() < normaSmax &&
+                    data.getDiastolic() > normaDmin && data.getDiastolic() < normaDmax) {
+                inNorma++;
+            }
+            if (data.getSistolic() > giperSmin && data.getSistolic() < giperSmax &&
+                    data.getDiastolic() > giperDmin && data.getDiastolic() < giperDmax) {
+                inGiper++;
+            }
+        }
+        //------------------
+
+        UserDataDTO lastData = userDataDTOs.get(count - 1);
+        lastS = lastData.getSistolic();
+        lastD = lastData.getDiastolic();
+        //-------------------
+
+
     }
 
-    private boolean checInsideOrNiarNorm(PointValue av) {
+    private boolean checInsideOrNiarNorm() {
         int e = 10;
-        if (Math.abs(av.getX() - normaSmin) < e && Math.abs(av.getX() - normaSmax) < e && Math.abs(av.getY() - normaDmin) < e && Math.abs(av.getY() - normaSmax) < e)
+        if (Math.abs(MS - normaSmin) < e && Math.abs(MS - normaSmax) < e && Math.abs(MD - normaDmin) < e && Math.abs(MD - normaSmax) < e)
             return true;
         return false;
     }
 
-    private void calcAreaSet() {
+    private void buildAreaSet() {
+
         List<PointValue> points = new ArrayList<>();
-        float max = 50;
+
+        float dS = Math.max(Math.abs(MS - minS), Math.abs(MS - maxS));
+        float dD = Math.max(Math.abs(MD - minD), Math.abs(MD - maxD));
+        float maxR = Math.max(dD, dS);
         float e = (float) 10;
+
         float s, d;
-        PointValue v = average.get(0);
+
         for (float a = 0; a < 2 * Math.PI; a += 0.1) {
-            for (float R = max; R > 0; R -= 0.5) {
+            for (float R = maxR; R > 0; R -= 0.5) {
                 boolean is = false;
-                s = (float) (v.getX() + R * Math.sin(a));
-                d = (float) (v.getY() + R * Math.cos(a));
+                s = (float) (MS + R * Math.sin(a));
+                d = (float) (MD + R * Math.cos(a));
                 for (PointValue p : entryAll) {
                     if (Math.abs(s - p.getX()) < e && Math.abs(d - p.getY()) < e) {
                         points.add(p);
@@ -428,6 +314,7 @@ public class StatisticsHelper {
         }
         if (points.size() > 0)
             points.add(points.get(0));
+
         entryAll = new ArrayList<>(points);
     }
 
@@ -487,4 +374,85 @@ public class StatisticsHelper {
     }
 
 
+    private void calcD() {
+        for (UserDataDTO u : userDataDTOs) {
+            SS += Math.pow((u.getDiastolic() - MS), 2);
+            SD += Math.pow((u.getDiastolic() - MD), 2);
+        }
+        SS /= (count - 1);
+        SD /= (count - 1);
+
+        SS = (float) Math.sqrt(SS);
+        SD = (float) Math.sqrt(SD);
+    }
+
+    private void calcM() {
+        for (UserDataDTO u : userDataDTOs) {
+            MS += u.getSistolic();
+            MD += u.getDiastolic();
+        }
+        MS /= count;
+        MD /= count;
+
+    }
+
+    private void calcRecomendation(int age) {
+        int progressState = 0;
+
+        double PS = Constants.searchNeedData(age).getNormS();
+        double PD = Constants.searchNeedData(age).getNormD();
+
+        boolean leftP = (lastS - PS > 0) ? false : true;
+        boolean leftM = (lastS - MS > 0) ? false : true;
+
+        boolean topP = (lastD - PD < 0) ? false : true;
+        boolean topM = (lastD - MD < 0) ? false : true;
+
+        boolean toPS = (!leftP && leftM) || (leftP && !leftM);
+        boolean toPD = (!topP && topM) || (topP && !topM);
+
+        boolean inHalfS = Math.abs(lastS - MS) > SS / 2 ? false : true;
+        boolean inHalfD = Math.abs(lastD - MD) > SD / 2 ? false : true;
+
+        boolean inS = Math.abs(lastS - MS) > SS ? false : true;
+        boolean inD = Math.abs(lastD - MD) > SD ? false : true;
+
+        boolean inMidleS = !inHalfS && inS;
+        boolean inMidleD = !inHalfD && inD;
+
+
+        if (inHalfD && inHalfS)
+            progressState = 5;
+
+
+        if (!inS && !inD && !toPD && !toPS)
+            progressState = 1;
+
+        if ((!inS && inD && !toPD && !toPS) || (inS && !inD && !toPD && !toPS))
+            progressState = 2;
+
+        if (inS && inD && !toPD && !toPS)
+            progressState = 3;
+
+        if (inS && inD && !toPD && !toPS)
+            progressState = 3;
+
+        if ((inS && inMidleD && !toPD && !toPS) || (inMidleS && inD && !toPD && !toPS))
+            progressState = 4;
+
+
+        if ((inS && inMidleD && toPD && toPS) || (inMidleS && inD && toPD && toPS))
+            progressState = 6;
+
+        if (inS && inD && toPD && toPS)
+            progressState = 7;
+
+        if ((!inS && inD && toPD && toPS) || (inS && !inD && toPD && toPS))
+            progressState = 8;
+
+        if (!inS && !inD && !toPD && !toPS)
+            progressState = 9;
+
+        recomendation = dbManager.getRecomendation(progressState);
+    }
 }

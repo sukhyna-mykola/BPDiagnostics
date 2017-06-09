@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Останнє вимірювання АТ"
+        android:text="@string/last_measure_BT"
         android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/s_dimen"
-                android:text="Дата (ДД-ММ-РРРР) і час (ЧЧ:ХХ)" />
+                android:text="@string/date_pattern" />
 
             <EditText
                 android:id="@+id/editText_date"
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/s_dimen"
-                android:text="Оцініть своє самопочуття" />
+                android:text="@string/evaluate_your" />
 
             <Spinner
                 android:id="@+id/spinner_state"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/s_dimen"
-                android:text="Вкажіть значення АТ(мм.р.с)" />
+                android:text="@string/input_value_BP" />
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
 
                 <TextView
                     android:padding="@dimen/s_dimen"
-                    android:text="Систолічний" />
+                    android:text="@string/sistolic_BP" />
 
 
                 <EditText
@@ -80,7 +80,7 @@
 
                 <TextView
                     android:padding="@dimen/s_dimen"
-                    android:text="Діастолічний" />
+                    android:text="@string/diastolic_BP" />
 
                 <EditText
                     android:id="@+id/editText_diastolic"
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Занести дані до бази" />
+                android:text="@string/added_data_o_database" />
 
         </LinearLayout>
 

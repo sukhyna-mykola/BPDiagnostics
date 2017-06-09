@@ -1,8 +1,66 @@
 <resources>
     <string name="app_name">Діагностика артеріально тиску</string>
+    <string name="health_state_good">Хороше</string>
+    <string name="health_state_norm">Добре</string>
+    <string name="health_state_bed">Погане</string>
+    <string name="sistolic_margin">"Нижня від %1$d до %2$d"</string>
+    <string name="diastolic_margin">"Верхня від %1$d до %2$d"</string>
+    <string name="sistolic_BP">Систолічний АТ</string>
+    <string name="diastolic_BP">Діастолічний АТ</string>
+    <string name="count_watch">Кількість спостережень %</string>
+    <string name="error_incorrect_data">Некоректні дані</string>
+    <string name="error_date_incorrect">Дата введена некоректно</string>
+    <string name="unallowed_data">Введені дані не допустимі. Перевірте і спробуйте знову</string>
+    <string name="added">Додано в базу</string>
+    <string name="error_password">Довжина пароля має бути більше 6 символів</string>
+    <string name="about">Про дотаток</string>
+    <string name="last_measure_BT">Останнє вимірювання АТ</string>
+    <string name="date_pattern">Дата (ДД-ММ-РРРР) і час (ЧЧ:ХХ)</string>
+    <string name="evaluate_your">Оцініть своє самопочуття</string>
+    <string name="input_value_BP">Вкажіть значення АТ(мм.р.с)</string>
+    <string name="added_data_o_database">Занести дані до бази</string>
+    <string name="last_name">Прізвище</string>
+    <string name="first_name">Ім’я</string>
+    <string name="parent_name">По-батькові</string>
+    <string name="birthday">Дата народження</string>
+    <string name="input_sex">Вкажіть стать</string>
+    <string name="male">Чоловік</string>
+    <string name="female">Жінка</string>
+    <string name="email">Електронна пошта</string>
+    <string name="password">Пароль</string>
+    <string name="you_doctor">Ви лікар?</string>
+    <string name="no">ні</string>
+    <string name="yes">так</string>
+    <string name="registration">Зареєструватись</string>
+    <string name="cencel">Відмінити</string>
+    <string name="sign_in">Вхід</string>
+    <string name="input_name">Введіть Ім’я, Прізвище та По-батькові пацієнта</string>
+    <string name="search">Пошук</string>
+    <string name="search_patient">Пошук пацієнта</string>
+    <string name="bullying_state_patient">Загальний стан пацієнта</string>
+    <string name="hearlth_state">Стан здоров`я:</string>
+    <string name="out_norma">поза нормою</string>
+    <string name="in_norma">в нормі</string>
+    <string name="statistics">Статистичні показаники</string>
+    <string name="your_norm_data">Ваші нормальні показники АТ</string>
+    <string name="recomendations">Рекомендація стосовно стану здоров’я:</string>
 
+    <string-array name="health_states">
+        <item>@string/health_state_good</item>
+        <item>@string/health_state_norm</item>
+        <item>@string/health_state_bed</item>
+    </string-array>
     <string-array name="recomendations">
-        </string-array>
+        <item>У вашому стані необхідно негайно звернутись до лікаря. Вам слід приділити увагу своєму стану здоров\'я. </item>
+        <item>Вам слід приділити увагу своєму стану здоров\'я. Рекомендується випити свіжий сік моркви і петрушки, грейпфрута і апельсина. Виконуйте більше фізичних вправ. Заплануйте віхит до лікаря.</item>
+        <item>Ваш стан значно гірше, ніж норма. Вам слід відмовитись від вживання солі, спиртних напоїв та тютюнових виробів. Відпочиньте.</item>
+        <item>Ваш стан незначно, але гірше норми. Намайтесь вести більш рухливий спосіб життя. Включіть в свій раціон більше свіжих фруктів та овочів, особливо салат з буряка.</item>
+        <item>Ви знаходитесь у своїй нормі. Стан здоров\'я є прийнятним для нормального функціонування організму.</item>
+        <item>Ваш стан здоров\'я є кращим ніж зазвичай і ви можете почуватися вільно у будь-якій ситуації.</item>
+        <item>Ваш стан здоров\'я є кращим, ніж зазвичай і ви можете ні в чому собі не відмовляти.</item>
+        <item>Вам слід приділити увагу своєму стану здоров\'я. Рекомендується в середині дня  випивати чашку міцного солодкого чаю або кави. А також приділіть увагу кількості білків та вітамінів Е й групи В у складі вашого раціону харчування.</item>
+        <item>У вашому стані необхідно негайно звернутись до лікаря. Вам слід приділити увагу своєму стану здоров\'я. Рекомендовано сьогодні поспати більше 8 годин, а вранці влаштуйте собі контрасний душ і пийте більше води! </item>
+    </string-array>
 
 
 </resources>

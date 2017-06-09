@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
@@ -102,14 +103,14 @@ public class UserStatisticsFragment extends Fragment {
         switch (statisticsHelper.getState()) {
             case 1:
                 textState.setTextColor(Color.GREEN);
-                textState.setText("Хороше");
+                textState.setText(R.string.health_state_good);
                 break;
             case 2:
-                textState.setText("Добре");
+                textState.setText(R.string.health_state_norm);
                 textState.setTextColor(Color.YELLOW);
                 break;
             case 3:
-                textState.setText("Погане");
+                textState.setText(R.string.health_state_bed);
                 textState.setTextColor(Color.RED);
                 break;
         }
@@ -117,8 +118,8 @@ public class UserStatisticsFragment extends Fragment {
 
         textRecomendation.setText(statisticsHelper.getRecomendation());
 
-        textSistolic.setText("Нижня від " + statisticsHelper.getMinS() + " до " + statisticsHelper.getMaxS());
-        textDiastolic.setText("Верхня від " + statisticsHelper.getMinD() + " до " + statisticsHelper.getMaxD());
+        textSistolic.setText(getString(R.string.sistolic_margin, (int)statisticsHelper.getMinS(), (int)statisticsHelper.getMaxS()));
+        textDiastolic.setText(getString(R.string.diastolic_margin, (int)statisticsHelper.getMinD(),(int) statisticsHelper.getMaxD()));
 
         return v;
     }
@@ -185,22 +186,31 @@ public class UserStatisticsFragment extends Fragment {
         lineChartView.setLineChartData(data);
 
         Axis axisX = new Axis();
-        axisX.setName("Систолічний АТ");
+        axisX.setName(getString(R.string.sistolic_BP));
         axisX.setHasSeparationLine(true);
         data.setAxisXBottom(axisX);
 
         Axis axisY = new Axis();
-        axisY.setName("Діастолічний АТ");
+        axisY.setName(getString(R.string.diastolic_BP));
         axisY.setHasSeparationLine(true);
         data.setAxisYLeft(axisY);
 
 
-        ColumnChartData datacolumns = new ColumnChartData(statisticsHelper.getColumnValues());
+        Column outc = new Column(statisticsHelper.getColumnOut()).setHasLabels(true);
+        Column inc = new Column(statisticsHelper.getColumnIn()).setHasLabels(true);
+
+        List<Column> columns = new ArrayList<>();
+
+        columns.add(outc);
+        columns.add(inc);
+
+        ColumnChartData datacolumns = new ColumnChartData(columns);
+
         columnChartView.setColumnChartData(datacolumns);
 
 
         Axis axisYColumn = new Axis();
-        axisYColumn.setName("Кількість спостережень %");
+        axisYColumn.setName(getString(R.string.count_watch));
         axisYColumn.setHasSeparationLine(true);
         datacolumns.setAxisYLeft(axisYColumn);
 

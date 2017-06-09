@@ -37,7 +37,7 @@ public class MeasureFragment extends Fragment {
 
     private ArrayAdapter<String> arrayAdapter;
 
-    private List<String> states = new ArrayList<String>(Arrays.asList("Відмінне", "Гарне", "Погане"));
+    private String [] states;
 
 
     @BindView(R.id.editText_date)
@@ -75,6 +75,7 @@ public class MeasureFragment extends Fragment {
             id = getArguments().getLong(PreferencesManager.KEY_ID);
         }
         dbManager = DBManager.getInstance(getContext());
+        states = getResources().getStringArray(R.array.health_states);
 
     }
 
@@ -101,7 +102,7 @@ public class MeasureFragment extends Fragment {
 
         editTextDate.addTextChangedListener(new TextWatcher() {
             private String current = "";
-            private String ddmmyyyy = "ДДММРРРРЧЧХХ";
+            private String ddmmyyyy = "            ";
             private Calendar cal = Calendar.getInstance();
 
             @Override
@@ -177,23 +178,23 @@ public class MeasureFragment extends Fragment {
 
         try {
             String date = editTextDate.getText().toString();
-            if (!checkCorrectDate(date)) throw new NotAllowDataExeption("Дата введена некоректно");
+            if (!checkCorrectDate(date)) throw new NotAllowDataExeption(getString(R.string.error_date_incorrect));
             int sistolic = Integer.parseInt(editTextSistolic.getText().toString());
             int diastolic = Integer.parseInt(editTextDiastolic.getText().toString());
             if (sistolic < 10 || sistolic > 200 || diastolic < 10 || diastolic > 200)
-                throw new NotAllowDataExeption("Введені дані не допустимі. Перевірте і спробуйте знову");
+                throw new NotAllowDataExeption(getString(R.string.unallowed_data));
 
             int state = spinner.getSelectedItemPosition() + 1;
 
             if (id != -1) {
                 UserDataDTO dataDTO = new UserDataDTO(id, date, sistolic, diastolic, state);
                 dbManager.addUserData(dataDTO);
-                Toast.makeText(getContext(), "Додано в базу", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.added, Toast.LENGTH_SHORT).show();
             }
         } catch (NotAllowDataExeption e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Некоректні дані", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_incorrect_data, Toast.LENGTH_SHORT).show();
         }
 
 

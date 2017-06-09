@@ -12,7 +12,7 @@
         android:id="@+id/state_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Загальний стан пацієнта"
+        android:text="@string/bullying_state_patient"
         android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
@@ -148,7 +148,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Стан здоров`я: "
+                    android:text="@string/hearlth_state"
                     android:textSize="16sp" />
 
                 <TextView
@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/rect_red"
                         android:gravity="center"
-                        android:text="поза нормою"
+                        android:text="@string/out_norma"
                         android:textSize="12sp" />
 
                     <TextView
@@ -207,7 +207,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/rect_green"
                         android:gravity="center"
-                        android:text="в нормі"
+                        android:text="@string/in_norma"
                         android:textSize="12sp" />
                 </LinearLayout>
             </RelativeLayout>
@@ -222,13 +222,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/s_dimen"
-                    android:text="Статистичні показаники"
+                    android:text="@string/statistics"
                     android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ваші нормальні показники АТ" />
+                    android:text="@string/your_norm_data" />
 
                 <TextView
                     android:id="@+id/text_sistolic_var"
@@ -246,7 +246,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/m_dimen"
-                    android:text="Рекомендація стосовно стану здоров’я:" />
+                    android:text="@string/recomendations" />
 
                 <TextView
                     android:id="@+id/text_recomentadions"

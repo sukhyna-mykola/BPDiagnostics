@@ -6,11 +6,11 @@ import android.graphics.Color;
 import com.example.bpdiagnostics.models.AgePress;
 import com.example.bpdiagnostics.models.UserDataDTO;
 import com.example.bpdiagnostics.utils.Constants;
+import com.example.bpdiagnostics.utils.Jarvis;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 
@@ -287,35 +287,13 @@ public class StatisticsHelper {
 
     private void buildAreaSet() {
 
-        List<PointValue> points = new ArrayList<>();
+        List<PointValue> inputValues = new ArrayList<>();
 
-        float dS = Math.max(Math.abs(MS - minS), Math.abs(MS - maxS));
-        float dD = Math.max(Math.abs(MD - minD), Math.abs(MD - maxD));
-        float maxR = Math.max(dD, dS);
-        float e = (float) 10;
-
-        float s, d;
-
-        for (float a = 0; a < 2 * Math.PI; a += 0.1) {
-            for (float R = maxR; R > 0; R -= 0.5) {
-                boolean is = false;
-                s = (float) (MS + R * Math.sin(a));
-                d = (float) (MD + R * Math.cos(a));
-                for (PointValue p : entryAll) {
-                    if (Math.abs(s - p.getX()) < e && Math.abs(d - p.getY()) < e) {
-                        points.add(p);
-                        is = true;
-                        break;
-                    }
-                }
-
-                if (is) break;
-            }
+        for (UserDataDTO data:userDataDTOs) {
+            inputValues.add(new PointValue(data.getSistolic(),data.getDiastolic()));
         }
-        if (points.size() > 0)
-            points.add(points.get(0));
 
-        entryAll = new ArrayList<>(points);
+        entryAll = new ArrayList<>(new Jarvis().search(inputValues));
     }
 
     private void buildNorma() {
